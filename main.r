@@ -14,20 +14,22 @@ dat <- matrix(rep(0, 121), ncol=11)
 for (i in seq(length(x))) {
   x_index <- round(as.numeric(x[i]) / 0.1) + 1
   y_index <- round(as.numeric(y[i]) / 0.1) + 1
-  print(y_index)
   dat[x_index,y_index] <- dat[x_index,y_index] + 1
 }
 
 dat2 <- dat %>%
   tbl_df() %>%
-  rownames_to_column('Var1') %>%
-  gather(Var2, value, -Var1) %>%
+  rownames_to_column('X') %>%
+  gather(Y, value, -X) %>%
   mutate(
-    Var1 = factor(Var1, levels=1:11),
-    Var2 = factor(gsub("V", "", Var2), levels=11:1)
+    X = factor(X, levels=1:11),
+    Y = factor(gsub("V", "", Y), levels=11:1)
   )
 
-ggplot(dat2, aes(Var1, Var2)) +
-  geom_tile(aes(fill = value)) + 
-  geom_text(aes(label = round(value, 1))) +
-  scale_fill_gradient(low = "white", high = "red")
+tile <- aes(fill = value)
+label <- aes(label = ifelse(value > 0, as.character(value), ""))
+
+ggplot(dat2, aes(X, Y)) +
+  geom_tile(tile) +
+  geom_text(label) +
+  scale_fill_gradient(low = "white", high = "steelblue")
