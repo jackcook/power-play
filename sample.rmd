@@ -1,0 +1,17 @@
+---
+title: "Angela Chou"
+output: html_document
+---
+
+```{r include = FALSE}
+source("scatterplot.r")
+```
+
+## Shots from last game
+
+```{r}
+img <- readPNG("export.png")
+grid.raster(img)
+```
+
+## Most common lost points
