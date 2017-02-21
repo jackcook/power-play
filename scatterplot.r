@@ -26,7 +26,7 @@ generate_court_scatterplot <- function(data) {
     scale_y_continuous(limits = c(-1, 0), expand = c(0, 0)) +
     geom_point(color = "#444444", size = 1)
 
-  ggsave("~/Desktop/power-play/export.png",
+  ggsave("~/Desktop/power-play/court_export.png",
          plot = court_plot,
          width = 7.01,
          height = 15.24,

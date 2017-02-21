@@ -1,17 +1,23 @@
 ---
-title: "Angela Chou"
+title: "Badminton"
 output: html_document
 ---
 
 ```{r include = FALSE}
-source("scatterplot.r")
+library(png)
+source("main.r")
 ```
 
 ## Shots from last game
 
 ```{r}
-img <- readPNG("export.png")
+img <- readPNG("court_export.png")
 grid.raster(img)
 ```
 
-## Most common lost points
+## Most commonly lost points
+
+```{r}
+img <- readPNG("lost-points.png")
+grid.raster(img)
+```
