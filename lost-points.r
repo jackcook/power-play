@@ -8,7 +8,7 @@ find_lost_points <- function(data) {
   reasons <- c("Couldn't reach", "Hit net", "Hit out", "Left in")
   labels <- paste(reasons, " (", slices, ")")
   
-  png("~/Desktop/power-play/lost-points.png")
+  png("~/Desktop/power-play/lost_points_export.png")
   pie(slices, labels)
   dev.off()
 }

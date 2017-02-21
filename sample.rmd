@@ -18,6 +18,6 @@ grid.raster(img)
 ## Most commonly lost points
 
 ```{r}
-img <- readPNG("lost-points.png")
+img <- readPNG("lost_points_export.png")
 grid.raster(img)
 ```

@@ -5,4 +5,5 @@
 *.pdf
 
 *.game
-export.png
+*export.png
+sample.html
