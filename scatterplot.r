@@ -22,7 +22,7 @@ ggplot(dat, aes(x = x, y = y)) +
   theme(panel.background = element_rect(fill = "#2e9726"),
         panel.grid.major = element_line(color = "#2e9726"),
         panel.grid.minor = element_line(color = "#2e9726"),
-        plot.margin = unit(c(1, 1, 0.9, 1), "cm"),
+        plot.margin = grid::unit(c(0, 0, 0, 0), "mm"),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank()) +
@@ -31,5 +31,7 @@ ggplot(dat, aes(x = x, y = y)) +
   scale_y_continuous(limits = c(-1, 0), expand = c(0, 0)) +
   geom_point(color = "#444444", size = 1)
 
-grid.text(player_one, y = unit(0.95, "npc"))
-grid.text(player_two, y = unit(0.05, "npc"))
+ggsave("~/Desktop/power-play/export.png",
+       width = 7.01,
+       height = 15.24,
+       units = "cm")
