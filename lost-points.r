@@ -1,8 +1,8 @@
 find_lost_points <- function(data) {
   results <- c()
   
-  for (i in 1:(length(data[[10]]) / 8)) {
-    result <- data[[10]][,i][2]
+  for (i in 1:(length(data$points) / 8)) {
+    result <- data$points[,i][2]
     
     if (!is.null(result$integer)) {
       results <- c(results, result)
@@ -23,8 +23,8 @@ find_lost_points <- function(data) {
   given_shots <- c()
   received_shots <- c()
   
-  for (i in 1:(length(data[[10]]) / 8)) {
-    shots <- data[[10]][,i][6]
+  for (i in 1:(length(data$points) / 8)) {
+    shots <- data$points[,i][6]
     
     if (!is.null(shots$array)) {
       raw_coordinates <- as.numeric(unlist(shots$array[seq(2, length(shots$array), 2)]))

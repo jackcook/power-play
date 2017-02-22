@@ -4,18 +4,19 @@ library(tidyverse)
 library(XML)
 
 generate_court_scatterplot <- function(data) {
-  x <- c()
-  y <- c()
+  coordinates <- c()
   
-  for (i in 1:(length(data[[10]]) / 8)) {
-    shots <- data[[10]][,i][6]
+  for (i in 1:nrow(data)) {
+    coordinates_strs <- strsplit(levels(data$shots)[i], " ")
     
-    if (!is.null(shots$array)) {
-      coordinates <- as.numeric(unlist(shots$array[seq(2, length(shots$array), 2)]))
-      x <- c(x, coordinates[seq(1, length(coordinates), 2)])
-      y <- c(y, coordinates[seq(1, length(coordinates), 2) + 1] * -1)
+    for (j in 1:length(coordinates_strs[[1]])) {
+      parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
+      coordinates <- c(coordinates, as.numeric(parts[1]), as.numeric(parts[2]))
     }
   }
+  
+  x <- coordinates[seq(1, length(coordinates), 2)]
+  y <- coordinates[seq(2, length(coordinates), 2)] * -1
   
   dat <- data.frame(x = x, y = y)
 
