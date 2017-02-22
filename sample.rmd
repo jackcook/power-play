@@ -8,7 +8,7 @@ library(png)
 source("main.r")
 
 display <- function(filename) {
-  img <- readPNG(paste(filename, "_export.png"))
+  img <- readPNG(paste(filename, "_export.png", sep = ""))
   grid.raster(img)
 }
 ```
