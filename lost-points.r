@@ -1,58 +1,58 @@
 find_lost_points <- function(data) {
-  results <- c()
+  results <- data$results
   
-  for (i in 1:(length(data$points) / 8)) {
-    result <- data$points[,i][2]
-    
-    if (!is.null(result$integer)) {
-      results <- c(results, result)
-    }
-  }
-  
-  slices <- c(sum(results == 0),
-              sum(results == 1),
-              sum(results == 2),
-              sum(results == 3))
-  reasons <- c("Couldn't reach", "Hit net", "Hit out", "Left in")
+  slices <- c(sum(results == levels(results)[1]),
+              sum(results == levels(results)[2]),
+              sum(results == levels(results)[3]),
+              sum(results == levels(results)[4]))
+  reasons <- levels(results)
   labels <- paste(reasons, " (", slices, ")")
   
   png("lost_points_export.png")
   pie(slices, labels)
   dev.off()
   
+  ###
+  
   given_shots <- c()
   received_shots <- c()
   
-  for (i in 1:(length(data$points) / 8)) {
-    shots <- data$points[,i][6]
+  for (i in 1:nrow(data)) {
+    raw_coordinates <- c()
+    coordinates_strs <- strsplit(levels(data$shots)[i], " ")
     
-    if (!is.null(shots$array)) {
-      raw_coordinates <- as.numeric(unlist(shots$array[seq(2, length(shots$array), 2)]))
-      coordinates <- matrix(raw_coordinates, ncol = 2, byrow = TRUE)
-      last_three <- tail(coordinates, 3)
-      
-      given_shots <- c(given_shots, analyze_shot(last_three[1,], last_three[2,]))
-      received_shots <- c(received_shots, analyze_shot(last_three[2,], last_three[3,]))
+    for (j in 1:length(coordinates_strs[[1]])) {
+      parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
+      raw_coordinates <- c(raw_coordinates, as.numeric(parts[1]), as.numeric(parts[2]))
     }
-  }
     
+    coordinates <- matrix(raw_coordinates, ncol = 2, byrow = TRUE)
+    last_three <- tail(coordinates, 3)
+    
+    given_shots <- c(given_shots, analyze_shot(last_three[1,], last_three[2,]))
+    received_shots <- c(received_shots, analyze_shot(last_three[2,], last_three[3,]))
+  }
+  
   labels <- c("drop", "net", "drive", "clear")
+  
   given_shots_slices <- c(sum(given_shots == "drop"),
                           sum(given_shots == "net"),
                           sum(given_shots == "drive"),
                           sum(given_shots == "clear"))
+  given_shots_labels <- paste(labels, " (", given_shots_slices, ")", sep = "")
   
   received_shots_slices <- c(sum(received_shots == "drop"),
                              sum(received_shots == "net"),
                              sum(received_shots == "drive"),
                              sum(received_shots == "clear"))
+  received_shots_labels <- paste(labels, " (", received_shots_slices, ")", sep = "")
   
   png("lost_shots_given_export.png")
-  pie(given_shots_slices, labels)
+  pie(given_shots_slices, given_shots_labels)
   dev.off()
   
   png("lost_shots_received_export.png")
-  pie(received_shots_slices, labels)
+  pie(received_shots_slices, received_shots_labels)
   dev.off()
 }
 

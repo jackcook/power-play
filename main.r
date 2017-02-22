@@ -35,4 +35,4 @@ levels(points_data$servers) <- c("P1", "P2")
 levels(points_data$winners) <- c("P1", "P2")
 
 generate_court_scatterplot(points_data)
-#find_lost_points(points_data)
+find_lost_points(points_data)
