@@ -42,11 +42,11 @@ find_lost_points <- function(data) {
                              sum(received_shots == "drive"),
                              sum(received_shots == "clear"))
   
-  png("~/Desktop/power-play/lost_shots_given.png")
+  png("~/Desktop/power-play/lost_shots_given_export.png")
   pie(given_shots_slices, labels)
   dev.off()
   
-  png("~/Desktop/power-play/lost_shots_received.png")
+  png("~/Desktop/power-play/lost_shots_received_export.png")
   pie(received_shots_slices, labels)
   dev.off()
 }

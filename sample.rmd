@@ -8,7 +8,7 @@ library(png)
 source("main.r")
 
 display <- function(filename) {
-  img <- readPNG(filename)
+  img <- readPNG(paste(filename, "_export.png"))
   grid.raster(img)
 }
 ```
@@ -16,23 +16,23 @@ display <- function(filename) {
 ## Shots from last game
 
 ```{r}
-display("court_export.png")
+display("court")
 ```
 
 ## Most commonly lost points
 
 ```{r}
-display("lost_points_export.png")
+display("lost_points")
 ```
 
 ## Most commonly lost given shots
 
 ```{r}
-display("lost_shots_given.png")
+display("lost_shots_given")
 ```
 
 ## Most commonly lost received shots
 
 ```{r}
-display("lost_shots_received.png")
+display("lost_shots_received")
 ```
