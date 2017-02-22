@@ -22,7 +22,7 @@ display("court")
 ## Most commonly lost points
 
 ```{r}
-display("lost_points")
+#display("lost_points")
 ```
 
 ## Most commonly lost given shots

@@ -4,12 +4,22 @@ library(tidyverse)
 library(XML)
 
 generate_court_scatterplot <- function(data) {
-  coordinates <- as.numeric(xpathSApply(data, "//real", xmlValue)[-c(1, 2)])
-  x <- coordinates[seq(1, length(coordinates), 2)]
-  y <- coordinates[seq(1, length(coordinates), 2) + 1] * -1
+  x <- c()
+  y <- c()
+  
+  for (i in 1:(length(data[[10]]) / 8)) {
+    shots <- data[[10]][,i][6]
+    
+    if (!is.null(shots$array)) {
+      coordinates <- as.numeric(unlist(shots$array[seq(2, length(shots$array), 2)]))
+      x <- c(x, coordinates[seq(1, length(coordinates), 2)])
+      y <- c(y, coordinates[seq(1, length(coordinates), 2) + 1] * -1)
+    }
+  }
+  
   dat <- data.frame(x = x, y = y)
 
-  img <- readPNG("~/Desktop/power-play/court.png")
+  img <- readPNG("court.png")
   g <- rasterGrob(img, interpolate = TRUE)
 
   court_plot <- ggplot(dat, aes(x = x, y = y)) +
@@ -26,7 +36,7 @@ generate_court_scatterplot <- function(data) {
     scale_y_continuous(limits = c(-1, 0), expand = c(0, 0)) +
     geom_point(color = "#444444", size = 1)
 
-  ggsave("~/Desktop/power-play/court_export.png",
+  ggsave("court_export.png",
          plot = court_plot,
          width = 7.01,
          height = 15.24,

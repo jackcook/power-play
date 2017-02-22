@@ -1,6 +1,14 @@
 find_lost_points <- function(data) {
-  integers <- as.numeric(xpathSApply(data, "//integer", xmlValue))
-  results <- integers[seq(1, length(integers), 3)]
+  results <- c()
+  
+  for (i in 1:(length(data[[10]]) / 8)) {
+    result <- data[[10]][,i][2]
+    
+    if (!is.null(result$integer)) {
+      results <- c(results, result)
+    }
+  }
+  
   slices <- c(sum(results == 0),
               sum(results == 1),
               sum(results == 2),
@@ -8,18 +16,15 @@ find_lost_points <- function(data) {
   reasons <- c("Couldn't reach", "Hit net", "Hit out", "Left in")
   labels <- paste(reasons, " (", slices, ")")
   
-  png("~/Desktop/power-play/lost_points_export.png")
+  png("lost_points_export.png")
   pie(slices, labels)
   dev.off()
-  
-  data <- xmlTreeParse("~/Desktop/power-play/in.game")
-  data_list <- xmlToList(data)
   
   given_shots <- c()
   received_shots <- c()
   
-  for (i in 1:(length(data_list[[10]]) / 8)) {
-    shots <- data_list[[10]][,i][6]
+  for (i in 1:(length(data[[10]]) / 8)) {
+    shots <- data[[10]][,i][6]
     
     if (!is.null(shots$array)) {
       raw_coordinates <- as.numeric(unlist(shots$array[seq(2, length(shots$array), 2)]))
@@ -42,11 +47,11 @@ find_lost_points <- function(data) {
                              sum(received_shots == "drive"),
                              sum(received_shots == "clear"))
   
-  png("~/Desktop/power-play/lost_shots_given_export.png")
+  png("lost_shots_given_export.png")
   pie(given_shots_slices, labels)
   dev.off()
   
-  png("~/Desktop/power-play/lost_shots_received_export.png")
+  png("lost_shots_received_export.png")
   pie(received_shots_slices, labels)
   dev.off()
 }

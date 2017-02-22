@@ -1,9 +1,10 @@
 setwd("/Users/v-jacco/Desktop/power-play")
 
-require(XML)
+library(XML)
 source("lost-points.r")
 source("scatterplot.r")
 
-data <- xmlParse("~/Desktop/power-play/in.game")
+xml_data <- xmlTreeParse("in.game")
+data <- xmlToList(xml_data)
 generate_court_scatterplot(data)
 find_lost_points(data)
