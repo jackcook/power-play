@@ -18,19 +18,21 @@ find_lost_points <- function(data) {
   received_shots <- c()
   
   for (i in 1:nrow(data)) {
-    raw_coordinates <- c()
-    coordinates_strs <- strsplit(levels(data$shots)[i], " ")
-    
-    for (j in 1:length(coordinates_strs[[1]])) {
-      parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
-      raw_coordinates <- c(raw_coordinates, as.numeric(parts[1]), as.numeric(parts[2]))
+    if (data$winners[i] == "P2") {
+      raw_coordinates <- c()
+      coordinates_strs <- strsplit(levels(data$shots)[i], " ")
+      
+      for (j in 1:length(coordinates_strs[[1]])) {
+        parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
+        raw_coordinates <- c(raw_coordinates, as.numeric(parts[1]), as.numeric(parts[2]))
+      }
+      
+      coordinates <- matrix(raw_coordinates, ncol = 2, byrow = TRUE)
+      last_three <- tail(coordinates, 3)
+      
+      given_shots <- c(given_shots, analyze_shot(last_three[1,], last_three[2,]))
+      received_shots <- c(received_shots, analyze_shot(last_three[2,], last_three[3,]))
     }
-    
-    coordinates <- matrix(raw_coordinates, ncol = 2, byrow = TRUE)
-    last_three <- tail(coordinates, 3)
-    
-    given_shots <- c(given_shots, analyze_shot(last_three[1,], last_three[2,]))
-    received_shots <- c(received_shots, analyze_shot(last_three[2,], last_three[3,]))
   }
   
   labels <- c("drop", "net", "drive", "clear")
