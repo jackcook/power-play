@@ -3,6 +3,7 @@ setwd("/Users/v-jacco/Desktop/power-play")
 library(XML)
 source("lost-points.r")
 source("scatterplot.r")
+source("shots.r")
 
 xml_data <- xmlTreeParse("in.game")
 raw_data <- xmlToList(xml_data)
@@ -19,11 +20,11 @@ shots <- c()
 for (i in 1:length(raw_shots)) {
   coordinates <- as.numeric(raw_shots[[i]][seq(2, length(raw_shots[[i]]), 2)])
   coordinates_str <- ""
-  
+
   for (j in seq(1, length(coordinates), 2)) {
     coordinates_str <- paste(coordinates_str, paste(coordinates[j], ",", coordinates[j+1], sep = ""))
   }
-  
+
   shots <- c(shots, substring(coordinates_str, 2))
 }
 
@@ -36,3 +37,4 @@ levels(points_data$winners) <- c("P1", "P2")
 
 generate_court_scatterplot(points_data)
 find_lost_points(points_data)
+analyze_points(points_data)
