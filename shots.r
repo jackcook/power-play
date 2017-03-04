@@ -19,8 +19,6 @@ analyze_points <- function(data) {
 
     all_shots <- c(all_shots, list(shots))
   }
-
-  print(all_shots)
 }
 
 analyze_shot <- function(shot1, shot2) {

@@ -29,7 +29,7 @@ generate_court_scatterplot <- function(data) {
           panel.grid.major = element_line(color = "#2e9726"),
           panel.grid.minor = element_line(color = "#2e9726"),
           plot.margin = unit(c(0, 0, 0, 0), "mm"),
-          axis.text = element_blank(),
+          #axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.title = element_blank()) +
     coord_fixed(ratio = 2.1739) +

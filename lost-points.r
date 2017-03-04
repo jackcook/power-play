@@ -1,11 +1,17 @@
 find_lost_points <- function(data) {
-  results <- data$results
+  results <- c()
+  
+  for (i in 1:nrow(data)) {
+    if (data$winners[i] == "P2") {
+      results <- c(results, data$results[i])
+    }
+  }
 
-  slices <- c(sum(results == levels(results)[1]),
-              sum(results == levels(results)[2]),
-              sum(results == levels(results)[3]),
-              sum(results == levels(results)[4]))
-  reasons <- levels(results)
+  slices <- c(sum(results == 1),
+              sum(results == 2),
+              sum(results == 3),
+              sum(results == 4))
+  reasons <- levels(data$results)
   labels <- paste(reasons, " (", slices, ")")
 
   png("lost_points_export.png")
@@ -18,9 +24,9 @@ find_lost_points <- function(data) {
   received_shots <- c()
 
   for (i in 1:nrow(data)) {
-    if (data$winners[i] == "P2") {
+    #if (data$winners[i] == "P1") {
       raw_coordinates <- c()
-      coordinates_strs <- strsplit(levels(data$shots)[i], " ")
+      coordinates_strs <- strsplit(as.character(data$shots[i]), " ")
 
       for (j in 1:length(coordinates_strs[[1]])) {
         parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
@@ -28,11 +34,59 @@ find_lost_points <- function(data) {
       }
 
       coordinates <- matrix(raw_coordinates, ncol = 2, byrow = TRUE)
-      last_three <- tail(coordinates, 3)
 
-      given_shots <- c(given_shots, analyze_shot(last_three[1,], last_three[2,]))
-      received_shots <- c(received_shots, analyze_shot(last_three[2,], last_three[3,]))
-    }
+      if (nrow(coordinates) >= 3) {
+        last_three <- tail(coordinates, 3)
+        
+        shot1 <- last_three[1,]
+        shot2 <- last_three[2,]
+        
+        x1 <- shot1[1]
+        y1 <- ifelse(shot1[2] > 0.5, shot1[2] - 0.5, -1 * (shot1[2] - 0.5))
+        x2 <- shot2[1]
+        y2 <- ifelse(shot2[2] > 0.5, shot2[2] - 0.5, -1 * (shot2[2] - 0.5))
+        
+        analysis <- ""
+        
+        if (y2 <= 0.15) {
+          if (y1 >= 0.15) {
+            analysis <- "drop"
+          } else {
+            analysis <- "net"
+          }
+        } else if (y2 <= 0.35) {
+          analysis <- "drive"
+        } else {
+          analysis <- "clear"
+        }
+
+        given_shots <- c(given_shots, analysis)
+        
+        shot1 <- last_three[2,]
+        shot2 <- last_three[3,]
+        
+        x1 <- shot1[1]
+        y1 <- ifelse(shot1[2] > 0.5, shot1[2] - 0.5, -1 * (shot1[2] - 0.5))
+        x2 <- shot2[1]
+        y2 <- ifelse(shot2[2] > 0.5, shot2[2] - 0.5, -1 * (shot2[2] - 0.5))
+        
+        analysis <- ""
+        
+        if (y2 <= 0.15) {
+          if (y1 >= 0.15) {
+            analysis <- "drop"
+          } else {
+            analysis <- "net"
+          }
+        } else if (y2 <= 0.35) {
+          analysis <- "drive"
+        } else {
+          analysis <- "clear"
+        }
+        
+        received_shots <- c(received_shots, analysis)
+      }
+    #}
   }
 
   labels <- c("drop", "net", "drive", "clear")
@@ -56,23 +110,4 @@ find_lost_points <- function(data) {
   png("lost_shots_received_export.png")
   pie(received_shots_slices, received_shots_labels)
   dev.off()
-}
-
-analyze_shot <- function(shot1, shot2) {
-  x1 <- shot1[1]
-  y1 <- ifelse(shot1[2] > 0.5, shot1[2] - 0.5, shot1[2])
-  x2 <- shot2[1]
-  y2 <- ifelse(shot2[2] > 0.5, shot2[2] - 0.5, shot2[2])
-
-  if (y2 <= 0.2) {
-    if (y1 >= 0.3) {
-      return("drop")
-    } else {
-      return("net")
-    }
-  } else if (y2 <= 0.35) {
-    return("drive")
-  } else {
-    return("clear")
-  }
 }
