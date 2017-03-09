@@ -3,13 +3,13 @@ library(png)
 library(tidyverse)
 library(XML)
 
-generate_court_scatterplot <- function(data) {
+generate_court_scatterplot <- function(data, name1, name2) {
   coordinates <- c()
 
   for (i in 1:nrow(data)) {
     coordinates_strs <- strsplit(levels(data$shots)[i], " ")
 
-    for (j in 1:length(coordinates_strs[[1]])) {
+    for (j in 2:length(coordinates_strs[[1]])) {
       parts <- unlist(strsplit(coordinates_strs[[1]][j], ","))
       coordinates <- c(coordinates, as.numeric(parts[1]), as.numeric(parts[2]))
     }
@@ -29,9 +29,13 @@ generate_court_scatterplot <- function(data) {
           panel.grid.major = element_line(color = "#2e9726"),
           panel.grid.minor = element_line(color = "#2e9726"),
           plot.margin = unit(c(0, 0, 0, 0), "mm"),
-          #axis.text = element_blank(),
+          plot.title = element_text(hjust = 0.5, size = 12.0),
+          axis.text = element_blank(),
           axis.ticks = element_blank(),
-          axis.title = element_blank()) +
+          axis.title.x = element_text(size = 12.0),
+          axis.title.y = element_blank()) +
+    ggtitle(paste(name2, "'s Shots", sep = "")) +
+    xlab(paste(name1, "'s Shots", sep = "")) +
     coord_fixed(ratio = 2.1739) +
     scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
     scale_y_continuous(limits = c(-1, 0), expand = c(0, 0)) +

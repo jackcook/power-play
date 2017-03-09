@@ -24,7 +24,7 @@ find_lost_points <- function(data) {
   received_shots <- c()
 
   for (i in 1:nrow(data)) {
-    #if (data$winners[i] == "P1") {
+    if (data$winners[i] == "P1") {
       raw_coordinates <- c()
       coordinates_strs <- strsplit(as.character(data$shots[i]), " ")
 
@@ -86,7 +86,7 @@ find_lost_points <- function(data) {
         
         received_shots <- c(received_shots, analysis)
       }
-    #}
+    }
   }
 
   labels <- c("drop", "net", "drive", "clear")

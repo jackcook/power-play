@@ -18,14 +18,18 @@ raw_shots <- points[seq(6, length(points) - 8, 8)]
 shots <- c()
 
 for (i in 1:length(raw_shots)) {
-  coordinates <- as.numeric(raw_shots[[i]][seq(2, length(raw_shots[[i]]), 2)])
-  coordinates_str <- ""
+  if (length(raw_shots[[i]]) > 1) {
+    coordinates <- as.numeric(raw_shots[[i]][seq(2, length(raw_shots[[i]]), 2)])
+    coordinates_str <- ""
 
-  for (j in seq(1, length(coordinates), 2)) {
-    coordinates_str <- paste(coordinates_str, paste(coordinates[j], ",", coordinates[j+1], sep = ""))
+    for (j in seq(1, length(coordinates), 2)) {
+      coordinates_str <- paste(coordinates_str, paste(coordinates[j], ",", coordinates[j+1], sep = ""))
+    }
+
+    shots <- c(shots, substring(coordinates_str, 2))
+  } else {
+    shots <- c(shots, "")
   }
-
-  shots <- c(shots, substring(coordinates_str, 2))
 }
 
 winners <- unlist(points[seq(8, length(points) - 8, 8)])
@@ -35,6 +39,6 @@ levels(points_data$results) <- c("Couldn't reach", "Hit net", "Hit out", "Left i
 levels(points_data$servers) <- c("P1", "P2")
 levels(points_data$winners) <- c("P1", "P2")
 
-generate_court_scatterplot(points_data)
+generate_court_scatterplot(points_data, data[[3]], data[[4]])
 find_lost_points(points_data)
 analyze_points(points_data)
